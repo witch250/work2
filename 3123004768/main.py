@@ -1,6 +1,7 @@
 #import jieba
 import jieba.analyse
 import os
+import math
 def OpenTxt(txtpath):
     try:
         with open(txtpath,"r",encoding='UTF-8') as txt:
@@ -8,12 +9,19 @@ def OpenTxt(txtpath):
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
 
+def hash(word):
+    t=ord(word[0])
+    t=bin(t)
+    print(t)
+    return t
+    
+    
 def SimHash(txt):
     taglist=jieba.analyse.extract_tags(txt, topK=20, withWeight=True)
     for keyword,weight in taglist:
-        pass
-
-
+        weight*=10
+        weight=math.ceil(weight)
+        keyword=hash(keyword)
 
 
 try:
