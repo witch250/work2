@@ -1,5 +1,6 @@
-import jieba
-
+#import jieba
+import jieba.analyse
+import os
 def OpenTxt(txtpath):
     try:
         with open(txtpath,"r",encoding='UTF-8') as txt:
@@ -14,17 +15,21 @@ def SimHash(txt):
 
 
 
-def main():
-    try:
-        path1=""
-        path2=""
-        txt1=OpenTxt(path1)
-        txt2=OpenTxt(path2)
-        SimHash(txt1)
-        SimHash(txt2)
 
-    except FileNotFoundError as e:
-        print(e)
+try:
+    #获取路径，更改路径
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    #print(os.getcwd())
+    path1='./orig_0.8_add.txt'
+    path2='./orig_0.8_del.txt'
+    txt1=OpenTxt(path1)
+    txt2=OpenTxt(path2)
+    SimHash(txt1)
+    SimHash(txt2)
+    print("OK")
+except FileNotFoundError as e:
+    print(e)
 
 
-main()
+
+
