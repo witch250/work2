@@ -1,3 +1,2 @@
 jieba = 0.42.1
-numpy=2.2.3
-simhash=2.1.2
+levenshtein

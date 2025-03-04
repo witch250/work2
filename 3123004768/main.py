@@ -26,9 +26,11 @@ def hash(source):
     return str(x)
     
     
-def SimHash(txt):
+def SimHash1(txt):
     taglist=jieba.analyse.extract_tags(txt, topK=20, withWeight=True)
     for keyword,weight in taglist:
+        print(simhash(keyword))
+        '''
         weight*=20
         weight=math.ceil(weight)
         keyword=hash(keyword)
@@ -39,7 +41,7 @@ def SimHash(txt):
             else:
                 temp.append(-weight)
     print(temp)
-
+'''
 
 
 
@@ -51,8 +53,8 @@ try:
     path2='./orig_0.8_del.txt'
     txt1=OpenTxt(path1)
     txt2=OpenTxt(path2)
-    SimHash(txt1)
-    SimHash(txt2)
+    SimHash1(txt1)
+    SimHash1(txt2)
     print("OK")
 except FileNotFoundError as e:
     print(e)
