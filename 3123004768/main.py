@@ -3,6 +3,7 @@ import jieba.analyse
 import os
 import math
 import simhash
+import Levenshtein
 def OpenTxt(txtpath):
     try:
         with open(txtpath,"r",encoding='UTF-8') as txt:
@@ -29,8 +30,6 @@ def hash(source):
 def SimHash1(txt):
     taglist=jieba.analyse.extract_tags(txt, topK=20, withWeight=True)
     for keyword,weight in taglist:
-        print(simhash(keyword))
-        '''
         weight*=20
         weight=math.ceil(weight)
         keyword=hash(keyword)
@@ -41,9 +40,9 @@ def SimHash1(txt):
             else:
                 temp.append(-weight)
     print(temp)
-'''
 
-
+def Levenshtein1(txt1,txt2):
+    return Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))
 
 try:
     #获取路径，更改路径
@@ -55,6 +54,8 @@ try:
     txt2=OpenTxt(path2)
     SimHash1(txt1)
     SimHash1(txt2)
+    result2=Levenshtein1(txt1,txt2)
+    print(result2)
     print("OK")
 except FileNotFoundError as e:
     print(e)
