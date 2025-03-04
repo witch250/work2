@@ -53,7 +53,7 @@ def SimHash1(txt):
             simhash+='0'
     return simhash   
 
-def haiming(s1,s2):
+def hamming(s1,s2):
     t1='0b'+s1
     t2='0b'+s2
     n=int(t1,2)^int(t2,2)
@@ -64,7 +64,14 @@ def haiming(s1,s2):
     return i
 
 def Levenshtein1(txt1,txt2):
-    return Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))
+    #return Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))
+    s1=jieba.analyse.extract_tags(txt1, topK=30)
+    s2=jieba.analyse.extract_tags(txt2, topK=30)
+    s1.sort()
+    s2.sort()
+    print(s1)
+    print(s2)
+    return Levenshtein.ratio(s1,s2)
 
 try:
     #获取路径，更改路径
@@ -76,11 +83,14 @@ try:
     txt2=OpenTxt(path2)
     simhash1=SimHash1(txt1)
     simhash2=SimHash1(txt2)
-    print(simhash1)
-    print(simhash2)
-    result1=haiming(simhash1,simhash2)
+    #print(simhash1)
+    #print(simhash2)
+    result1=hamming(simhash1,simhash2)
+    #拿leven拟合的
+    result1=-0.0276*result1+0.928
     print(result1)
-    #result2=Levenshtein1(txt1,txt2)
+    result2=Levenshtein1(txt1,txt2)
+    print(result2)
     print("OK")
 except FileNotFoundError as e:
     print(e)
