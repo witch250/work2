@@ -2,8 +2,8 @@
 import jieba.analyse
 import os
 import math
-import simhash
 import Levenshtein
+import numpy as np
 def OpenTxt(txtpath):
     try:
         with open(txtpath,"r",encoding='UTF-8') as txt:
@@ -29,17 +29,39 @@ def hash(source):
     
 def SimHash1(txt):
     taglist=jieba.analyse.extract_tags(txt, topK=20, withWeight=True)
+    T=[]
     for keyword,weight in taglist:
         weight*=20
         weight=math.ceil(weight)
         keyword=hash(keyword)
         temp=[]
+        #64位keyword
         for i in keyword:
             if i=='1':
                 temp.append(weight)
             else:
                 temp.append(-weight)
-    print(temp)
+        T.append(temp)
+    #64单位的20维数组合并为1维数组
+    list1=np.sum(np.array(T),axis=0)
+    #64位二进制simhash
+    simhash=''
+    for i in list1:
+        if i<0:
+            simhash+='1'
+        else:
+            simhash+='0'
+    return simhash   
+
+def haiming(s1,s2):
+    t1='0b'+s1
+    t2='0b'+s2
+    n=int(t1,2)^int(t2,2)
+    i=0
+    while n:
+        n&=(n-1)
+        i+=1
+    return i
 
 def Levenshtein1(txt1,txt2):
     return Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))
@@ -52,10 +74,13 @@ try:
     path2='./orig_0.8_del.txt'
     txt1=OpenTxt(path1)
     txt2=OpenTxt(path2)
-    SimHash1(txt1)
-    SimHash1(txt2)
-    result2=Levenshtein1(txt1,txt2)
-    print(result2)
+    simhash1=SimHash1(txt1)
+    simhash2=SimHash1(txt2)
+    print(simhash1)
+    print(simhash2)
+    result1=haiming(simhash1,simhash2)
+    print(result1)
+    #result2=Levenshtein1(txt1,txt2)
     print("OK")
 except FileNotFoundError as e:
     print(e)
