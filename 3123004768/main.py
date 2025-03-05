@@ -76,8 +76,8 @@ def Levenshtein1(txt1,txt2):
     s2=jieba.analyse.extract_tags(txt2, topK=30)
     s1.sort()
     s2.sort()
-    print(s1)
-    print(s2)
+    #print(s1)
+    #print(s2)
     return Levenshtein.ratio(s1,s2)
 
 try:
