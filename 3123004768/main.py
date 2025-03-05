@@ -116,8 +116,12 @@ try:
     #print(simhash2)
     result1=hamming(simhash1,simhash2)
     #print(result1)
-    #拿leven拟合的,数据不够多
-    result1=-0.0276*result1+0.928
+    #拿leven拟合的,数据不够多,R=0.7
+    result1=0.0004*result1*result1-0.039*result1+1
+    if result1<0:
+        result1=0
+    elif result1>1:
+        result=1
     print(result1)
     result2=Levenshtein1(txt1,txt2)
     print(result2)
