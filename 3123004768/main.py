@@ -123,7 +123,7 @@ try:
     print(result2)
     result3=Jaccard(txt1,txt2)
     print(result3)
-    WriteTxt(result1*0.35+result2*0.65,path3)
+    WriteTxt(result1*0.4+result2*0.3+result3*0.3,path3)
     print("OK")
 except FileNotFoundError as e:
     print(e)
