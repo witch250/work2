@@ -13,8 +13,8 @@ def OpenTxt(txtpath):
 
 def WriteTxt(op,path):
     try:
-        with open(path,'w') as f:
-            f.write("相似度为%.2f",op)
+        with open(path,'w',encoding='UTF-8') as f:
+            f.write("相似度为%.2f"%(op*100)+'%')
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
 
