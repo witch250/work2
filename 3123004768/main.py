@@ -17,12 +17,14 @@ def WriteTxt(op,path):
             f.write("相似度为%.2f"%(op*100)+'%')
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
-
+#某种哈希算法,将词语转为64位2进制数字符串
 def hash(source):
     if source == "":
             return 0
     else:
+        #unicode16进制转十进制左移7位
         x = ord(source[0]) << 7
+        #print (x)
         m = 1000003
         mask = 2 ** 128 - 1
         for c in source:
@@ -30,6 +32,7 @@ def hash(source):
         x ^= len(source)
         if x == -1:
             x = -2
+        #转为64位2进制数
         x = bin(x).replace('0b', '').zfill(64)[-64:]
     return str(x)
     
@@ -76,10 +79,12 @@ def Levenshtein1(txt1,txt2):
     #return Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))
     s1=jieba.analyse.extract_tags(txt1, topK=30)
     s2=jieba.analyse.extract_tags(txt2, topK=30)
+    #list莫名其妙仅位置不同时会得到完全不同，我猜可以这么改
     s1.sort()
     s2.sort()
     #print(s1)
     #print(s2)
+    #比较list,返回小数
     return Levenshtein.ratio(s1,s2)
 
 try:
