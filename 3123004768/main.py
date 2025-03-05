@@ -14,7 +14,7 @@ def OpenTxt(txtpath):
 def WriteTxt(op,path):
     try:
         with open(path,'w',encoding='UTF-8') as f:
-            f.write("相似度为%.2f"%(op*100)+'%')
+            f.write("相似度为%.2f"%op)
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
 #某种哈希算法,将词语转为64位2进制数字符串
@@ -43,16 +43,17 @@ def SimHash1(txt):
     for keyword,weight in taglist:
         weight*=20
         weight=math.ceil(weight)
+        #某种哈希算法,将词语转为64位2进制数字符串
         keyword=hash(keyword)
         temp=[]
-        #64位keyword
+        #根据64位2进制数字符串和权重构造向量
         for i in keyword:
             if i=='1':
                 temp.append(weight)
             else:
                 temp.append(-weight)
         T.append(temp)
-    #64单位的20维数组合并为1维数组
+    #64单位的20维向量合并为1维向量
     list1=np.sum(np.array(T),axis=0)
     if(T==[]):
         return '00'
@@ -65,6 +66,7 @@ def SimHash1(txt):
             simhash+='0'
     return simhash   
 
+#i=[0,64]10内大概相似
 def hamming(s1,s2):
     t1='0b'+s1
     t2='0b'+s2
@@ -79,13 +81,25 @@ def Levenshtein1(txt1,txt2):
     #return Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))
     s1=jieba.analyse.extract_tags(txt1, topK=30)
     s2=jieba.analyse.extract_tags(txt2, topK=30)
-    #list莫名其妙仅位置不同时会得到完全不同，我猜可以这么改
+    #list仅位置不同时会得到完全不同，我猜可以这么改
     s1.sort()
     s2.sort()
     #print(s1)
     #print(s2)
     #比较list,返回小数
     return Levenshtein.ratio(s1,s2)
+
+def Jaccard(txt1,txt2):
+    s1=jieba.analyse.extract_tags(txt1, topK=30)
+    s2=jieba.analyse.extract_tags(txt2, topK=30)
+    s1=set(s1)
+    s2=set(s2)
+    num1=len(s1&s2)
+    num2=len(s1|s2)
+    if num2==0:
+        return 1
+    return num1/num2
+
 
 try:
     #获取路径，更改路径
@@ -101,12 +115,14 @@ try:
     #print(simhash1)
     #print(simhash2)
     result1=hamming(simhash1,simhash2)
-    print(result1)
+    #print(result1)
     #拿leven拟合的,数据不够多
     result1=-0.0276*result1+0.928
-    #print(result1)
+    print(result1)
     result2=Levenshtein1(txt1,txt2)
     print(result2)
+    result3=Jaccard(txt1,txt2)
+    print(result3)
     WriteTxt(result1*0.35+result2*0.65,path3)
     print("OK")
 except FileNotFoundError as e:
