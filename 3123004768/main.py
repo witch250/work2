@@ -11,6 +11,13 @@ def OpenTxt(txtpath):
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
 
+def WriteTxt(op,path):
+    try:
+        with open(path,'w') as f:
+            f.write("相似度为%.2f",op)
+    except FileNotFoundError:
+        raise FileNotFoundError("找不到文件")
+
 def hash(source):
     if source == "":
             return 0
@@ -79,6 +86,7 @@ try:
     #print(os.getcwd())
     path1='./orig_0.8_add.txt'
     path2='./orig_0.8_del.txt'
+    path3='./output.txt'
     txt1=OpenTxt(path1)
     txt2=OpenTxt(path2)
     simhash1=SimHash1(txt1)
@@ -91,6 +99,7 @@ try:
     print(result1)
     result2=Levenshtein1(txt1,txt2)
     print(result2)
+    WriteTxt(result1*0.5+result2*0.5,path3)
     print("OK")
 except FileNotFoundError as e:
     print(e)
