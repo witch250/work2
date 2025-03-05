@@ -51,6 +51,8 @@ def SimHash1(txt):
         T.append(temp)
     #64单位的20维数组合并为1维数组
     list1=np.sum(np.array(T),axis=0)
+    if(T==[]):
+        return '00'
     #64位二进制simhash
     simhash=''
     for i in list1:
@@ -94,12 +96,13 @@ try:
     #print(simhash1)
     #print(simhash2)
     result1=hamming(simhash1,simhash2)
-    #拿leven拟合的
+    print(result1)
+    #拿leven拟合的,数据不够多
     result1=-0.0276*result1+0.928
     print(result1)
     result2=Levenshtein1(txt1,txt2)
     print(result2)
-    WriteTxt(result1*0.5+result2*0.5,path3)
+    WriteTxt(result1*0.35+result2*0.65,path3)
     print("OK")
 except FileNotFoundError as e:
     print(e)
