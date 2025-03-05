@@ -99,7 +99,7 @@ try:
     print(result1)
     #拿leven拟合的,数据不够多
     result1=-0.0276*result1+0.928
-    print(result1)
+    #print(result1)
     result2=Levenshtein1(txt1,txt2)
     print(result2)
     WriteTxt(result1*0.35+result2*0.65,path3)
