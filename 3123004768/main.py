@@ -20,6 +20,8 @@ def OpenTxt(txtpath):
         raise FileNotFoundError("找不到文件")
     except MemoryError:
         raise MemoryError("内存溢出")
+    except PermissionError:
+        raise PermissionError("不允许访问文件")
 
 def WriteTxt(op,path):
     try:
@@ -27,7 +29,7 @@ def WriteTxt(op,path):
             f.write("相似度为%.2f"%op)
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
-#某种哈希算法,将词语转为64位2进制数字符串，照搬的，在找出处，2010年前含
+#某种哈希算法,将词语转为64位2进制数字符串，照搬的，在找出处，2010年前含,有风险，故删除
 @profile
 def hash(source):
     if source == "":
@@ -90,37 +92,43 @@ def hamming(s1,s2):
     return i
 @profile
 def Levenshtein1(txt1,txt2):
-    s1=jieba.analyse.extract_tags(txt1, topK=30)
-    s2=jieba.analyse.extract_tags(txt2, topK=30)
-    #list仅位置不同时会得到完全不同，我猜可以这么改
-    s1.sort()
-    s2.sort()
-    #print(s1)
-    #print(s2)
-    #比较list,返回小数
-    return Levenshtein.ratio(s1,s2)*0.5+Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))*0.5
+    try:
+        s1=jieba.analyse.extract_tags(txt1, topK=30)
+        s2=jieba.analyse.extract_tags(txt2, topK=30)
+        #list仅位置不同时会得到完全不同，我猜可以这么改
+        s1.sort()
+        s2.sort()
+        #print(s1)
+        #print(s2)
+        #比较list,返回小数
+        return Levenshtein.ratio(s1,s2)*0.5+Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))*0.5
+    except MemoryError:
+        raise MemoryError("内存溢出")
 
 #关键词交集中元素个数除以并集
 @profile
 def Jaccard(txt1,txt2):
-    s1=jieba.analyse.extract_tags(txt1, topK=30)
-    s2=jieba.analyse.extract_tags(txt2, topK=30)
-    s1=set(s1)
-    s2=set(s2)
-    num1=len(s1&s2)
-    num2=len(s1|s2)
-    if num2==0:
-        return 1
-    return num1/num2
+    try:
+        s1=jieba.analyse.extract_tags(txt1, topK=30)
+        s2=jieba.analyse.extract_tags(txt2, topK=30)
+        s1=set(s1)
+        s2=set(s2)
+        num1=len(s1&s2)
+        num2=len(s1|s2)
+        if num2==0:
+            return 1
+        return num1/num2
+    except MemoryError:
+        raise MemoryError("内存溢出")
 
 def cmdread():
     path=sys.argv
     try:
-        if path[1]==''|path[2]==''|path[3]=='':
+        if path[1]=='' or path[2]=='' or path[3]=='':
             pass
     except IndexError:
         raise IndexError("输入不存在")
-    return path1
+    return path 
 
 #main
 if __name__=='__main__':
@@ -157,13 +165,17 @@ if __name__=='__main__':
         result3=Jaccard(txt1,txt2)
         print(result3)
         WriteTxt(result1*0.4+result2*0.3+result3*0.3,path3)
-        print("OK")
+        #print("OK")
     except FileNotFoundError as e:
         print(e)
     except IndexError as e:
         print(e)
     except MemoryError as e:
         print(e)
+    except PermissionError as e:
+        print(e)
+        print("程序执行完毕")
+        #os.system("pause")
 
 
 
