@@ -3,6 +3,10 @@ import jieba.analyse
 import os
 import math
 import Levenshtein
+from line_profiler import profile #4.2.0 电脑重启再使用......
+#cd
+#py -m kernprof -l main.py   
+#py -m line_profiler main.py.lprof
 import numpy as np
 def OpenTxt(txtpath):
     try:
@@ -17,7 +21,8 @@ def WriteTxt(op,path):
             f.write("相似度为%.2f"%op)
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
-#某种哈希算法,将词语转为64位2进制数字符串
+#某种哈希算法,将词语转为64位2进制数字符串，照搬的，在找出处，2010年前含
+@profile
 def hash(source):
     if source == "":
             return 0
@@ -36,7 +41,7 @@ def hash(source):
         x = bin(x).replace('0b', '').zfill(64)[-64:]
     return str(x)
     
-    
+@profile
 def SimHash1(txt):
     taglist=jieba.analyse.extract_tags(txt, topK=20, withWeight=True)
     T=[]
@@ -66,7 +71,8 @@ def SimHash1(txt):
             simhash+='0'
     return simhash   
 
-#i=[0,64]10内大概相似
+#i=[0,64]10内大概相似,3内认为相似
+@profile
 def hamming(s1,s2):
     t1='0b'+s1
     t2='0b'+s2
@@ -76,9 +82,8 @@ def hamming(s1,s2):
         n&=(n-1)
         i+=1
     return i
-
+@profile
 def Levenshtein1(txt1,txt2):
-    #return Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))
     s1=jieba.analyse.extract_tags(txt1, topK=30)
     s2=jieba.analyse.extract_tags(txt2, topK=30)
     #list仅位置不同时会得到完全不同，我猜可以这么改
@@ -87,8 +92,10 @@ def Levenshtein1(txt1,txt2):
     #print(s1)
     #print(s2)
     #比较list,返回小数
-    return Levenshtein.ratio(s1,s2)
+    return Levenshtein.ratio(s1,s2)*0.5+Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))*0.5
 
+#关键词交集中元素个数除以并集
+@profile
 def Jaccard(txt1,txt2):
     s1=jieba.analyse.extract_tags(txt1, topK=30)
     s2=jieba.analyse.extract_tags(txt2, topK=30)
@@ -100,13 +107,13 @@ def Jaccard(txt1,txt2):
         return 1
     return num1/num2
 
-
+#main
 try:
     #获取路径，更改路径
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    #print(os.getcwd())
-    path1='./orig_0.8_add.txt'
-    path2='./orig_0.8_del.txt'
+    print(os.getcwd())
+    path1='./orig.txt'
+    path2='./orig_0.8_add.txt'
     path3='./output.txt'
     txt1=OpenTxt(path1)
     txt2=OpenTxt(path2)
