@@ -4,7 +4,7 @@ import os
 import Levenshtein
 from line_profiler import profile #4.2.0 电脑重启再使用......
 #coverage   代码覆盖 py -m coverage run test.py py -m coverage report py -m coverage html -d covhtml
-#memory_profiler-0.61.0 内存
+#memory_profiler-0.61.0 内存 py -m mprof run main.py py -m mprof plot 
 #cd 打开文件夹
 #py -m kernprof -l main.py   测试时间
 #py -m line_profiler main.py.lprof  打开测试时间报告
