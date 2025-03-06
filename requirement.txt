@@ -2,7 +2,6 @@
 jieba              0.42.1
 Levenshtein        0.27.1
 line_profiler      4.2.0    #测试代码
-numpy              2.2.3
-RapidFuzz          3.12.2
+RapidFuzz          3.12.2   #不太清楚
 
 vs code 1.98.0上用Python解释器3.13.2上运行的

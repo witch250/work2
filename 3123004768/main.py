@@ -1,15 +1,14 @@
 #import jieba
 import jieba.analyse
 import os
-import math
 import Levenshtein
 from line_profiler import profile #4.2.0 电脑重启再使用......
-#coverage
-#memory_profiler-0.61.0 psutil-7.0.0 contourpy-1.3.1 cycler-0.12.1 fonttools-4.56.0 kiwisolver-1.4.8 matplotlib-3.10.1 packaging-24.2 pillow-11.1.0 pyparsing-3.2.1 python-dateutil-2.9.0.post0 six-1.17.0
-#cd
-#py -m kernprof -l main.py   
-#py -m line_profiler main.py.lprof
-import numpy as np
+#coverage   代码覆盖
+#memory_profiler-0.61.0 内存
+#cd 打开文件夹
+#py -m kernprof -l main.py   测试时间
+#py -m line_profiler main.py.lprof  打开测试时间报告
+
 import sys
 
 def OpenTxt(txtpath):
@@ -22,6 +21,8 @@ def OpenTxt(txtpath):
         raise MemoryError("内存溢出")
     except PermissionError:
         raise PermissionError("不允许访问文件")
+    except OSError:
+        raise OSError("请检查斜杠")
 
 def WriteTxt(op,path):
     try:
@@ -31,9 +32,13 @@ def WriteTxt(op,path):
         raise FileNotFoundError("找不到文件")
     except PermissionError:
         raise PermissionError("不允许访问文件")
+    except SyntaxError:
+        raise SyntaxError("文件类型错误")
 
 @profile
 def Levenshtein1(txt1,txt2):
+    if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
+        return 0
     try:
         s1=jieba.analyse.extract_tags(txt1, topK=30)
         s2=jieba.analyse.extract_tags(txt2, topK=30)
@@ -49,7 +54,9 @@ def Levenshtein1(txt1,txt2):
 
 #关键词交集中元素个数除以并集
 @profile
-def Jaccard(txt1,txt2):
+def Jaccard1(txt1,txt2):
+    if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
+        return 0
     try:
         s1=jieba.analyse.extract_tags(txt1, topK=30)
         s2=jieba.analyse.extract_tags(txt2, topK=30)
@@ -63,8 +70,7 @@ def Jaccard(txt1,txt2):
     except MemoryError:
         raise MemoryError("内存溢出")
 
-#main
-if __name__=='__main__':
+def main():
     try:
         #获取路径，更改路径
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -88,10 +94,10 @@ if __name__=='__main__':
         txt1=OpenTxt(path1)
         txt2=OpenTxt(path2)
         result2=Levenshtein1(txt1,txt2)
-        print(result2)
-        result3=Jaccard(txt1,txt2)
-        print(result3)
-        WriteTxt(result2*0.3+result3*0.3,path3)
+        #print(result2)
+        result3=Jaccard1(txt1,txt2)
+        #print(result3)
+        WriteTxt(result2*0.5+result3*0.5,path3)
         #print("OK")
     except FileNotFoundError as e:
         print(e)
@@ -101,8 +107,13 @@ if __name__=='__main__':
         print(e)
     except PermissionError as e:
         print(e)
+    except OSError as e:
+        print(e)
         print("程序执行完毕")
         #os.system("pause")
+
+if __name__=='__main__':
+    main()
 
 
 
