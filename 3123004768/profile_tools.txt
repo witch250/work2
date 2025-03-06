@@ -1,0 +1,115 @@
+Timer unit: 1e-06 s
+
+Total time: 0.0002543 s
+File: main.py
+Function: hash at line 25
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    25                                           @profile
+    26                                           def hash(source):
+    27        40         13.1      0.3      5.2      if source == "":
+    28                                                       return 0
+    29                                               else:
+    30                                                   #unicode16进制转十进制左移7位
+    31        40         22.2      0.6      8.7          x = ord(source[0]) << 7
+    32                                                   #print (x)
+    33        40         11.0      0.3      4.3          m = 1000003
+    34        40         24.9      0.6      9.8          mask = 2 ** 128 - 1
+    35       122         42.0      0.3     16.5          for c in source:
+    36        82         42.9      0.5     16.9              x = ((x * m) ^ ord(c)) & mask
+    37        40         16.5      0.4      6.5          x ^= len(source)
+    38        40         11.8      0.3      4.6          if x == -1:
+    39                                                       x = -2
+    40                                                   #转为64位2进制数
+    41        40         43.2      1.1     17.0          x = bin(x).replace('0b', '').zfill(64)[-64:]
+    42        40         26.7      0.7     10.5      return str(x)
+
+Total time: 1.04614 s
+File: main.py
+Function: SimHash1 at line 44
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    44                                           @profile
+    45                                           def SimHash1(txt):
+    46         2    1043006.1 521503.1     99.7      taglist=jieba.analyse.extract_tags(txt, topK=20, withWeight=True)
+    47         2          1.1      0.6      0.0      T=[]
+    48        42         14.9      0.4      0.0      for keyword,weight in taglist:
+    49        40         13.1      0.3      0.0          weight*=20
+    50        40         18.5      0.5      0.0          weight=math.ceil(weight)
+    51                                                   #某种哈希算法,将词语转为64位2进制数字符串
+    52        40        567.4     14.2      0.1          keyword=hash(keyword)
+    53        40         11.2      0.3      0.0          temp=[]
+    54                                                   #根据64位2进制数字符串和权重构造向量
+    55      2600        717.1      0.3      0.1          for i in keyword:
+    56      2560        664.1      0.3      0.1              if i=='1':
+    57      1183        306.0      0.3      0.0                  temp.append(weight)
+    58                                                       else:
+    59      1377        362.2      0.3      0.0                  temp.append(-weight)
+    60        40         10.2      0.3      0.0          T.append(temp)
+    61                                               #64单位的20维向量合并为1维向量
+    62         2        303.6    151.8      0.0      list1=np.sum(np.array(T),axis=0)
+    63         2          1.6      0.8      0.0      if(T==[]):
+    64                                                   return '00'
+    65                                               #64位二进制simhash
+    66         2          0.6      0.3      0.0      simhash=''
+    67       130         58.1      0.4      0.0      for i in list1:
+    68       128         41.7      0.3      0.0          if i<0:
+    69        73         21.9      0.3      0.0              simhash+='1'
+    70                                                   else:
+    71        55         16.4      0.3      0.0              simhash+='0'
+    72         2          2.3      1.2      0.0      return simhash   
+
+Total time: 1.18e-05 s
+File: main.py
+Function: hamming at line 75
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    75                                           @profile
+    76                                           def hamming(s1,s2):
+    77         1          1.1      1.1      9.3      t1='0b'+s1
+    78         1          0.3      0.3      2.5      t2='0b'+s2
+    79         1          2.1      2.1     17.8      n=int(t1,2)^int(t2,2)
+    80         1          0.2      0.2      1.7      i=0
+    81         8          2.5      0.3     21.2      while n:
+    82         7          2.7      0.4     22.9          n&=(n-1)
+    83         7          2.3      0.3     19.5          i+=1
+    84         1          0.6      0.6      5.1      return i
+
+Total time: 0.814817 s
+File: main.py
+Function: Levenshtein1 at line 85
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    85                                           @profile
+    86                                           def Levenshtein1(txt1,txt2):
+    87         1     163798.9 163798.9     20.1      s1=jieba.analyse.extract_tags(txt1, topK=30)
+    88         1     234269.2 234269.2     28.8      s2=jieba.analyse.extract_tags(txt2, topK=30)
+    89                                               #list仅位置不同时会得到完全不同，我猜可以这么改
+    90         1          4.4      4.4      0.0      s1.sort()
+    91         1          2.3      2.3      0.0      s2.sort()
+    92                                               #print(s1)
+    93                                               #print(s2)
+    94                                               #比较list,返回小数
+    95         1     416742.0 416742.0     51.1      return Levenshtein.ratio(s1,s2)*0.5+Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))*0.5
+
+Total time: 0.39984 s
+File: main.py
+Function: Jaccard at line 98
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    98                                           @profile
+    99                                           def Jaccard(txt1,txt2):
+   100         1     165537.9 165537.9     41.4      s1=jieba.analyse.extract_tags(txt1, topK=30)
+   101         1     234285.8 234285.8     58.6      s2=jieba.analyse.extract_tags(txt2, topK=30)
+   102         1          4.4      4.4      0.0      s1=set(s1)
+   103         1          1.7      1.7      0.0      s2=set(s2)
+   104         1          4.1      4.1      0.0      num1=len(s1&s2)
+   105         1          4.0      4.0      0.0      num2=len(s1|s2)
+   106         1          0.6      0.6      0.0      if num2==0:
+   107                                                   return 1
+   108         1          1.2      1.2      0.0      return num1/num2
