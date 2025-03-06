@@ -3,7 +3,7 @@ import jieba.analyse
 import os
 import Levenshtein
 from line_profiler import profile #4.2.0 电脑重启再使用......
-#coverage   代码覆盖
+#coverage   代码覆盖 py -m coverage run test.py py -m coverage report py -m coverage html -d covhtml
 #memory_profiler-0.61.0 内存
 #cd 打开文件夹
 #py -m kernprof -l main.py   测试时间
@@ -32,8 +32,8 @@ def WriteTxt(op,path):
         raise FileNotFoundError("找不到文件")
     except PermissionError:
         raise PermissionError("不允许访问文件")
-    except SyntaxError:
-        raise SyntaxError("文件类型错误")
+    except Exception:
+        raise Exception("发生错误")
 
 @profile
 def Levenshtein1(txt1,txt2):
@@ -90,7 +90,6 @@ def main():
             path1='./orig.txt'
             path2='./orig_0.8_add.txt'
             path3='./output.txt'
-        print(path1)
         txt1=OpenTxt(path1)
         txt2=OpenTxt(path2)
         result2=Levenshtein1(txt1,txt2)
@@ -110,6 +109,8 @@ def main():
     except OSError as e:
         print(e)
         print("程序执行完毕")
+    except Exception as e:
+        print(e)
         #os.system("pause")
 
 if __name__=='__main__':

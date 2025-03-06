@@ -2,6 +2,7 @@ from main import Levenshtein1
 from main import Jaccard1
 from main import OpenTxt
 from main import WriteTxt
+from main import main
 def test():
     s1=""
     s2=""
@@ -40,8 +41,11 @@ def test():
             try:
                 OpenTxt("c:/1.txt")
             except FileNotFoundError as e:
-                    print(e)                   
+                    print(e)              
     #memoryerror不测
+    #write不测，怕把自己爆了
+    #indexerror不测，不知道怎么测
 
 if __name__=='__main__':
     test()
+    main()

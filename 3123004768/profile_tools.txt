@@ -1,47 +1,47 @@
 Timer unit: 1e-06 s
 
-Total time: 1.4659 s
+Total time: 1.5806 s
 File: main.py
-Function: Levenshtein1 at line 34
+Function: Levenshtein1 at line 38
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
-    34                                           @profile
-    35                                           def Levenshtein1(txt1,txt2):
-    36         1          1.3      1.3      0.0      if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
-    37                                                   return 0
-    38         1          0.4      0.4      0.0      try:
-    39         1     833450.4 833450.4     56.9          s1=jieba.analyse.extract_tags(txt1, topK=30)
-    40         1     233141.4 233141.4     15.9          s2=jieba.analyse.extract_tags(txt2, topK=30)
-    41                                                   #list仅位置不同时会得到完全不同，我猜可以这么改
-    42         1         11.3     11.3      0.0          s1.sort()
-    43         1          2.4      2.4      0.0          s2.sort()
-    44                                                   #print(s1)
-    45                                                   #print(s2)
-    46                                                   #比较list,返回小数
-    47         1     399290.8 399290.8     27.2          return Levenshtein.ratio(s1,s2)*0.5+Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))*0.5
-    48                                               except MemoryError:
-    49                                                   raise MemoryError("内存溢出")
+    38                                           @profile
+    39                                           def Levenshtein1(txt1,txt2):
+    40         1          0.7      0.7      0.0      if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
+    41                                                   return 0
+    42         1          0.3      0.3      0.0      try:
+    43         1     837692.7 837692.7     53.0          s1=jieba.analyse.extract_tags(txt1, topK=30)
+    44         1     265689.3 265689.3     16.8          s2=jieba.analyse.extract_tags(txt2, topK=30)
+    45                                                   #list仅位置不同时会得到完全不同，我猜可以这么改
+    46         1          9.3      9.3      0.0          s1.sort()
+    47         1          2.3      2.3      0.0          s2.sort()
+    48                                                   #print(s1)
+    49                                                   #print(s2)
+    50                                                   #比较list,返回小数
+    51         1     477201.9 477201.9     30.2          return Levenshtein.ratio(s1,s2)*0.5+Levenshtein.ratio(jieba.analyse.extract_tags(txt1, topK=20),jieba.analyse.extract_tags(txt2, topK=20))*0.5
+    52                                               except MemoryError:
+    53                                                   raise MemoryError("内存溢出")
 
-Total time: 0.404069 s
+Total time: 0.470275 s
 File: main.py
-Function: Jaccard1 at line 52
+Function: Jaccard1 at line 56
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
-    52                                           @profile
-    53                                           def Jaccard1(txt1,txt2):
-    54         1          1.1      1.1      0.0      if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
-    55                                                   return 0
-    56         1          0.3      0.3      0.0      try:
-    57         1     166455.1 166455.1     41.2          s1=jieba.analyse.extract_tags(txt1, topK=30)
-    58         1     237594.9 237594.9     58.8          s2=jieba.analyse.extract_tags(txt2, topK=30)
-    59         1          5.2      5.2      0.0          s1=set(s1)
-    60         1          1.7      1.7      0.0          s2=set(s2)
-    61         1          4.6      4.6      0.0          num1=len(s1&s2)
-    62         1          3.8      3.8      0.0          num2=len(s1|s2)
-    63         1          0.4      0.4      0.0          if num2==0:
-    64                                                       return 1
-    65         1          1.8      1.8      0.0          return num1/num2
-    66                                               except MemoryError:
-    67                                                   raise MemoryError("内存溢出")
+    56                                           @profile
+    57                                           def Jaccard1(txt1,txt2):
+    58         1          1.0      1.0      0.0      if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
+    59                                                   return 0
+    60         1          0.4      0.4      0.0      try:
+    61         1     202371.5 202371.5     43.0          s1=jieba.analyse.extract_tags(txt1, topK=30)
+    62         1     267884.5 267884.5     57.0          s2=jieba.analyse.extract_tags(txt2, topK=30)
+    63         1          5.6      5.6      0.0          s1=set(s1)
+    64         1          1.5      1.5      0.0          s2=set(s2)
+    65         1          4.3      4.3      0.0          num1=len(s1&s2)
+    66         1          4.3      4.3      0.0          num2=len(s1|s2)
+    67         1          0.6      0.6      0.0          if num2==0:
+    68                                                       return 1
+    69         1          1.6      1.6      0.0          return num1/num2
+    70                                               except MemoryError:
+    71                                                   raise MemoryError("内存溢出")
