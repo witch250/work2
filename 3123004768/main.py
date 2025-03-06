@@ -4,16 +4,22 @@ import os
 import math
 import Levenshtein
 from line_profiler import profile #4.2.0 电脑重启再使用......
+#coverage
+#memory_profiler-0.61.0 psutil-7.0.0 contourpy-1.3.1 cycler-0.12.1 fonttools-4.56.0 kiwisolver-1.4.8 matplotlib-3.10.1 packaging-24.2 pillow-11.1.0 pyparsing-3.2.1 python-dateutil-2.9.0.post0 six-1.17.0
 #cd
 #py -m kernprof -l main.py   
 #py -m line_profiler main.py.lprof
 import numpy as np
+import sys
+
 def OpenTxt(txtpath):
     try:
         with open(txtpath,"r",encoding='UTF-8') as txt:
             return(txt.read())
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
+    except MemoryError:
+        raise MemoryError("内存溢出")
 
 def WriteTxt(op,path):
     try:
@@ -107,37 +113,57 @@ def Jaccard(txt1,txt2):
         return 1
     return num1/num2
 
+def cmdread():
+    path=sys.argv
+    try:
+        if path[1]==''|path[2]==''|path[3]=='':
+            pass
+    except IndexError:
+        raise IndexError("输入不存在")
+    return path1
+
 #main
-try:
-    #获取路径，更改路径
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    print(os.getcwd())
-    path1='./orig.txt'
-    path2='./orig_0.8_add.txt'
-    path3='./output.txt'
-    txt1=OpenTxt(path1)
-    txt2=OpenTxt(path2)
-    simhash1=SimHash1(txt1)
-    simhash2=SimHash1(txt2)
-    #print(simhash1)
-    #print(simhash2)
-    result1=hamming(simhash1,simhash2)
-    #print(result1)
-    #拿leven拟合的,数据不够多,R=0.7
-    result1=0.0004*result1*result1-0.039*result1+1
-    if result1<0:
-        result1=0
-    elif result1>1:
-        result=1
-    print(result1)
-    result2=Levenshtein1(txt1,txt2)
-    print(result2)
-    result3=Jaccard(txt1,txt2)
-    print(result3)
-    WriteTxt(result1*0.4+result2*0.3+result3*0.3,path3)
-    print("OK")
-except FileNotFoundError as e:
-    print(e)
+if __name__=='__main__':
+    try:
+        '''
+        #获取路径，更改路径
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+        print(os.getcwd())
+        path1='./orig.txt'
+        path2='./orig_0.8_add.txt'
+        path3='./output.txt''
+        '''
+        path=cmdread()
+        path1=path[1]
+        path2=path[2]
+        path3=path[3]
+        txt1=OpenTxt(path1)
+        txt2=OpenTxt(path2)
+        simhash1=SimHash1(txt1)
+        simhash2=SimHash1(txt2)
+        #print(simhash1)
+        #print(simhash2)
+        result1=hamming(simhash1,simhash2)
+        #print(result1)
+        #拿leven拟合的,数据不够多,R=0.7
+        result1=0.0004*result1*result1-0.039*result1+1
+        if result1<0:
+            result1=0
+        elif result1>1:
+            result=1
+        print(result1)
+        result2=Levenshtein1(txt1,txt2)
+        print(result2)
+        result3=Jaccard(txt1,txt2)
+        print(result3)
+        WriteTxt(result1*0.4+result2*0.3+result3*0.3,path3)
+        print("OK")
+    except FileNotFoundError as e:
+        print(e)
+    except IndexError as e:
+        print(e)
+    except MemoryError as e:
+        print(e)
 
 
 
