@@ -29,6 +29,8 @@ def WriteTxt(op,path):
             f.write("相似度为%.2f"%op)
     except FileNotFoundError:
         raise FileNotFoundError("找不到文件")
+    except PermissionError:
+        raise PermissionError("不允许访问文件")
 #某种哈希算法,将词语转为64位2进制数字符串，照搬的，在找出处，2010年前含,有风险，故删除
 @profile
 def hash(source):
