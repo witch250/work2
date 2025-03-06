@@ -8,6 +8,10 @@ def test():
     s2=""
     a1=Levenshtein1(s1,s2)+Jaccard1(s1,s2)
     print(a1/2)
+    s1="asnjnah akfjafa a apple"
+    s2="gjghjks hhijvhsch b a apple"
+    a1=Levenshtein1(s1,s2)+Jaccard1(s1,s2)
+    print(a1/2)
     s1=""
     s2="我是人"
     a1=Levenshtein1(s1,s2)+Jaccard1(s1,s2)
