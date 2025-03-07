@@ -2,7 +2,7 @@
 import jieba.analyse
 import os
 import Levenshtein
-from line_profiler import profile #4.2.0 电脑重启再使用......
+#from line_profiler import profile #4.2.0 电脑重启再使用......
 #coverage   代码覆盖 py -m coverage run test.py py -m coverage report py -m coverage html -d covhtml
 #memory_profiler-0.61.0 内存 py -m mprof run main.py py -m mprof plot 
 #cd 打开文件夹
@@ -35,7 +35,7 @@ def WriteTxt(op,path):
     except Exception:
         raise Exception("发生错误")
 
-@profile
+#@profile
 def Levenshtein1(txt1,txt2):
     if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
         return 0
@@ -53,7 +53,7 @@ def Levenshtein1(txt1,txt2):
         raise MemoryError("内存溢出")
 
 #关键词交集中元素个数除以并集
-@profile
+#@profile
 def Jaccard1(txt1,txt2):
     if (txt1=='' and txt2!='') or (txt2=='' and txt1!=''):
         return 0
