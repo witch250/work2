@@ -1,7 +1,3 @@
-| 这个作业属于哪个课程 | <https://edu.cnblogs.com/campus/gdgy/SoftwareEngineeringClassof2023/> |
-| :-----------------: |:---------------: |
-| 这个作业要求在哪里 | https://edu.cnblogs.com/campus/gdgy/SoftwareEngineeringClassof2023/homework/13324 |
-| 这个作业的目标 | 结合PSP学习需求分析，设计，高效编码，测试以及相关工具的使用 |
 
 ## PSP表格
 |Personal Software Process Stages | 预估耗时（分钟）| 实际耗时（分钟）|
