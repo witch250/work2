@@ -8,7 +8,7 @@ from line_profiler import profile #4.2.0 电脑重启再使用......
 #cd 打开文件夹
 #py -m kernprof -l main.py   测试时间
 #py -m line_profiler main.py.lprof  打开测试时间报告
-
+#py C:\Users\HONOR\Desktop\作业2\3123004768/main.py C:\Users\HONOR\Desktop\作业2\3123004768\orig.txt C:\Users\HONOR\Desktop\作业2\3123004768\orig_0.8_dis_1.txt C:\Users\HONOR\Desktop\作业2\3123004768\output.txt
 import sys
 
 def OpenTxt(txtpath):
